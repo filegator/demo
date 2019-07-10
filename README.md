@@ -1,4 +1,4 @@
-# FileGator Demo - Docker Image
+# FileGator Read-Only Demo - Docker Image
 
 ## Docker build
 `sudo docker build -t filegatordemo .`
@@ -9,8 +9,9 @@
 visit: http://127.0.0.1:8888
 
 ## Google Cloud
-You can build and upload this image to Google container registry and deploy it using [Cloud Run](https://cloud.google.com/run/)
+You can build and upload this demo to Google container registry and deploy it using [Cloud Run](https://cloud.google.com/run/)
 
 `gcloud builds submit --tag gcr.io/[PROJECT_ID]/fgdemo .`
+
 
 
