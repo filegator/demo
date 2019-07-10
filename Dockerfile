@@ -24,11 +24,12 @@ RUN apt-get install -y \
     php7.3-mbstring \
     php7.3-zip
 
-# Install Composer
+# Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/html
 
+# Install FileGator
 RUN git clone https://github.com/filegator/filegator.git && \
     cd filegator && \
     chmod -R 777 private/ && \
@@ -41,19 +42,14 @@ RUN git clone https://github.com/filegator/filegator.git && \
 COPY demorepo /var/www/html/demorepo/
 COPY configuration.php /var/www/html/filegator/
 COPY users.json /var/www/html/filegator/private/
-COPY start.sh /var/www/html/filegator/dist/
 
-# Fix permissions
-RUN chmod -R 755 /var/www/html/demorepo/ && \
-    chmod 755 /var/www/html/filegator/private/users.json && \
-    chmod 777 /var/www/html/filegator/dist/start.sh
+# Fix permissions so that demo is read-only
+RUN chmod -R 655 /var/www/html/demorepo/ && \
+    chmod 655 /var/www/html/filegator/private/users.json
 
 EXPOSE 8080
 
-# User which will run start.sh
-RUN adduser user
+RUN adduser rouser
 
-WORKDIR /var/www/html/filegator/dist/
-
-CMD ["su", "-", "user", "-c", "cd /var/www/html/filegator/dist/ && ./start.sh"]
+CMD ["su", "-", "rouser", "-c", "cd /var/www/html/filegator/dist/ && php -S 0.0.0.0:8080"]
 
