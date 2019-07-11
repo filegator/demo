@@ -1,5 +1,7 @@
 # FileGator Read-Only Demo - Docker Image
 
+Demo docker image for [FileGator](https://filegator.io). You can use `configuration.php` to tweak the app. See [docs](https://docs.filegator.io) for more info.
+
 ## Docker build
 `sudo docker build -t filegatordemo .`
 
