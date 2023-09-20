@@ -13,6 +13,8 @@ return [
         'upload_chunk_size' => 1 * 1024 * 1024, // 1MB
         'upload_simultaneous' => 3,
         'default_archive_name' => 'archive.zip',
+        'editable' => ['.txt', '.css', '.js', '.ts', '.html', '.php'],
+        'date_format' => 'YY/MM/DD hh:mm:ss',
     ],
 
     'services' => [
@@ -33,11 +35,15 @@ return [
             'handler' => '\Filegator\Services\Session\Adapters\SessionStorage',
             'config' => [
                 'handler' => function () {
-                    //$save_path = null; // use default system path
-                    $save_path = __DIR__.'/private/sessions';
+                    $save_path = null; // use default system path
+                    //$save_path = __DIR__.'/private/sessions';
                     $handler = new \Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler($save_path);
 
-                    return new \Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage([], $handler);
+                    return new \Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage([
+                            "cookie_samesite" => "Lax",
+                            "cookie_secure" => true,
+                            "cookie_httponly" => true,
+                        ], $handler);
                 },
             ],
         ],
@@ -68,32 +74,34 @@ return [
             'config' => [
                 'add_to_head' => '',
                 'add_to_body' => '
-                <!-- Ticksel analytics v1.0 -->
-                <script type="text/javascript">
+<style>@media screen and (max-width:1240px){#forkme{display:none}}}</style>
+		    <a id="forkme" href="https://github.com/filegator/filegator">
+                <img style="position: absolute; top: 0; left: 0; border: 0;" src="https://github.blog/wp-content/uploads/2008/12/forkme_left_darkblue_121621.png?resize=149%2C149" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+		    <!-- Ticksel analytics v1.0 -->
+		    <script type="text/javascript">
 var _tcfg = _tcfg || [];
 (function() {
-    _tcfg.push(["tags", "filegator-io,filegator-io-demo"]);
-    var u="https://cdn.ticksel.com/js/analytics_v1.0.js"; _tcfg.push(["account_id", 8348834]);
-    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
-    g.type="text/javascript"; g.async=true; g.src=u; g.setAttribute("crossorigin", "anonymous");
-    g.setAttribute("integrity", "sha256-7grd8jMivCG0iCcJ7m/Ny4gvWb0mPVpFhRQovLkaUl8=");
-    s.parentNode.insertBefore(g,s);
+	_tcfg.push(["tags", "filegator-io,filegator-io-demo"]);
+	var u="https://a.interactive32.com/js/safetick.js"; _tcfg.push(["account_id", 8348834]);
+	var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0];
+	g.type="text/javascript"; g.async=true; g.src=u; g.setAttribute("crossorigin", "anonymous");
+	s.parentNode.insertBefore(g,s);
   })();
 </script>
-<noscript><img src="https://beacon.ticksel.com/beam?account_id=8348834&referrer=&tags=filegator-io,filegator-io-demo" style="border:0;" width="0" height="0" alt="" /></noscript>
+<noscript><img src="https://a.interactive32.com/beam?account_id=8348834&referrer=&tags=filegator-io,filegator-io-demo" style="border:0;" width="0" height="0" alt="" /></noscript>
 <!-- End Ticksel Code -->
 ',
+            ],
         ],
-    ],
-    'Filegator\Services\Storage\Filesystem' => [
+        'Filegator\Services\Storage\Filesystem' => [
             'handler' => '\Filegator\Services\Storage\Filesystem',
             'config' => [
                 'separator' => '/',
                 'config' => [],
                 'adapter' => function () {
-                    return new \League\Flysystem\Adapter\Local(
-                        '/var/www/html/demorepo'
-                    );
+                  return new \League\Flysystem\Adapter\Local(
+                        '/var/www/demorepo'
+                      );
                 },
             ],
         ],
